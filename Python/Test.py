@@ -1,6 +1,4 @@
-:- use_module(library(clpfd)).
-
-query(1, [
+query1=[
 	[
 		[t1,[l1,l2,l3,l4,l5],[tue1,tue2,tue3, wed1,wed2,wed3, thu1,thu2,thu3]],
 		[t2,[l1,l2,l3,l4,l5,l11,l12,l13,l14,l15],[mon1,mon2,mon3, tue1,tue2,tue3, wed1,wed2,wed3]],
@@ -28,23 +26,4 @@ query(1, [
 		[r5,[mon3,tue3,wed3,thu3,fri3]]
 	],
 	[[mon1,mon2,mon3],[tue1,tue2,tue3],[wed1,wed2,wed3],[thu1,thu2,thu3],[fri1,fri2,fri3]]
-	]).
-
-start(X,S) :-
-	query(X,D),
-	solve(D,S).
-
-% Solution S : [[Monday Schedule], [Tuesday Schedule], [Wednesday Schedule], [Thursday Schedule], [Friday Schedule]]
-
-solve([Teachers,Lectures,Rooms,[Mon,Tue,Wed,Thu,Fri]], S) :-
-		timeroom(Mon,Rooms,MonPairs),
-		timeroom(Tue,Rooms,TuePairs),
-		append(MonPairs, TuePairs, Pairs1),
-		timeroom(Wed,Rooms,WedPairs),
-		append(Pairs1, WedPairs, Pairs2),
-		timeroom(Thu,Rooms,ThuPairs),
-		append(Pairs2, ThuPairs, Pairs3),
-		timeroom(Fri,Rooms,FriPairs),
-		append(Pairs3,FriPairs,Pairs),
-		alldistinct(Pairs).
-
+	]
