@@ -45,12 +45,29 @@ solve([Teachers,Lectures,Rooms,[Mon,Tue,Wed,Thu,Fri]], S) :-
 		timeroom(Thu,Rooms,ThuPairs),
 		append(Pairs2, ThuPairs, Pairs3),
 		timeroom(Fri,Rooms,FriPairs),
-		append(Pairs3,FriPairs,Pairs).
+		append(Pairs3,FriPairs,Pairs),
+		addlecture(Pairs,Lectures,Triplets),
+		addteacher(Triplets, Teachers, S).
 
 
 
-timeroom([],_,_).
+timeroom([],_,[]).
 timeroom([Slot|Timeslots], Rooms, [[Slot,Room]|R]) :-
 	member([Room, Slots], Rooms),
 	member(Slot, Slots),
 	timeroom(Timeslots,Rooms,R).
+
+addlecture([],_,[]).
+addlecture([[Slot,Room]|Pairs],Lectures,[[Slot,Room,Lecture]|R]) :-
+	member([Lecture,Rooms],Lectures),
+	member(Room,Rooms),
+	delete(Lectures,[Lecture,Rooms],RemLectures),
+	addlecture(Pairs,RemLectures,R).
+
+addteacher([],_,[]).
+addteacher([[Slot,Room,Lecture]|Triplets], Teachers, [[Slot,Room,Lecture,Teacher]|R]) :-
+	member([Teacher,Lectures,Times],Teachers),
+	member(Lecture,Lectures),
+	member(Slot,Times),
+	delete(Teachers,[Teacher,Lectures,Times],RemTeachers),
+	addteacher(Triplets, RemTeachers, R).
