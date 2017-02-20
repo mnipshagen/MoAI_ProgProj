@@ -30,6 +30,25 @@ query(1, [
 	[[mon1,mon2,mon3],[tue1,tue2,tue3],[wed1,wed2,wed3],[thu1,thu2,thu3],[fri1,fri2,fri3]]
 	]).
 
+query(2, [
+	[
+		[t1,[l1,l2,l3],[mon1,tue1,wed1]],
+		[t2,[l2,l3,l4],[mon2,tue1,tue2]],
+		[t3,[l4,l5,l6],[mon1,mon2,tue1,tue2,wed1,wed2]]
+	],
+	[
+		[l1,[r1,r2]],[l2,[r1,r2]],[l3,[r2,r3]],[l4,[r1,r3]],[l5,[r3],[l6,[r1,r2,r3]]]
+	],
+	[
+		[r1,[mon1,mon2,tue1,tue2,wed1,wed2]],
+		[r2,[mon1,mon2,tue1,tue2]],
+		[r3,[mon1,tue1,wed1]]
+	],
+	[
+		[mon1,mon2],[tue1,tue2],[wed1,wed2],[],[]
+	]
+	]).
+
 start(X,S) :-
 	query(X,D),
 	solve(D,S).
