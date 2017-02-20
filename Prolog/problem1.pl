@@ -1,3 +1,5 @@
+:- use_module(library(clpfd)).
+
 query(1,
 	[
 		[t1,[l1,l2,l3,l4,l5],[tue1,tue2,tue3, wed1,wed2,wed3, thu1,thu2,thu3]],
