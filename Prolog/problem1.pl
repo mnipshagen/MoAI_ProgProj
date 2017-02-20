@@ -45,6 +45,12 @@ solve([Teachers,Lectures,Rooms,[Mon,Tue,Wed,Thu,Fri]], S) :-
 		timeroom(Thu,Rooms,ThuPairs),
 		append(Pairs2, ThuPairs, Pairs3),
 		timeroom(Fri,Rooms,FriPairs),
-		append(Pairs3,FriPairs,Pairs),
-		alldistinct(Pairs).
+		append(Pairs3,FriPairs,Pairs).
 
+
+
+timeroom([],_,_).
+timeroom([Slot|Timeslots], Rooms, [[Slot,Room]|R]) :-
+	member([Room, Slots], Rooms),
+	member(Slot, Slots),
+	timeroom(Timeslots,Rooms,R).
