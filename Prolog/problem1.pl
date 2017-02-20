@@ -1,4 +1,5 @@
-(1, [
+query(1,
+	[
 		[t1,[l1,l2,l3,l4,l5],[tue1,tue2,tue3, wed1,wed2,wed3, thu1,thu2,thu3]],
 		[t2,[l1,l2,l3,l4,l5,l11,l12,l13,l14,l15],[mon1,mon2,mon3, tue1,tue2,tue3, wed1,wed2,wed3]],
 		[t3,[l6,l7,l8,l9,l10,l16,l17,l18,l19,l20],[thu1,thu2,thu3, fri1,fri2,fri3]],
@@ -25,3 +26,8 @@
 		[r5,[mon3,tue3,wed3,thu3,fri3]]
 	],
 	[mon1,mon2,mon3,tue1,tue2,tue3,wed1,wed2,wed3,thu1,thu2,thu3,fri1,fri2,fri3]).
+
+start(X,S) :- 
+	query(X,Teachers,Lectures,Rooms,TimeSlots),
+	solve(Teachers, Lectures, Rooms, TimeSlots, S).
+
