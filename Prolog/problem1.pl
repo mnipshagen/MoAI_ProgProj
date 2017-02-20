@@ -31,3 +31,7 @@ start(X,S) :-
 	query(X,Teachers,Lectures,Rooms,TimeSlots),
 	solve(Teachers, Lectures, Rooms, TimeSlots, S).
 
+% Solution S : [[Monday Schedule], [Tuesday Schedule], [Wednesday Schedule], [Thursday Schedule], [Friday Schedule]]
+
+solve(Teachers,Lectures,Rooms,TimeSlots, S) :-
+	
