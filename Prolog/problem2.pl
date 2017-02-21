@@ -117,7 +117,7 @@ even_odd2([],[],[]).
 even_odd2([H|T],E,[H|O]):-even_odd2(T,O,E).
 
 schedule([],Schedule,Schedule).
-schedule([[Lecture,Teachers,Rooms,TimeSlots]|R],Path,[[Slot,Lecture,Teacher,Room]|Res]) :-
+schedule([[Lecture,Teachers,Rooms,TimeSlots]|R],Path,Res) :-
 	length(Path,N),
 	member(Teacher,Teachers),
 	member(Room,Rooms),
