@@ -1,0 +1,41 @@
+[
+	{
+		"teachers":
+		{
+			"t1":["tue1","tue2","tue3","wed1","wed2","wed3","thu1","thu2","thu3"],
+			"t2":["mon1","mon2","mon3","tue1","tue2","tue3","wed1","wed2","wed3"],
+			"t3":["thu1","thu2","thu3","fri1","fri2","fri3"],
+			"t4":["mon2","mon3","tue2","tue3","wed2","wed3","thu2","thu3","fri2","fri3"],
+			"t5":["mon1","mon2","mon3","tue1","tue2","tue3","wed1","wed2","wed3","thu1","thu2","thu3","fri1","fri2","fri3"]
+		},
+		"lectures":
+		{
+			"l1":{"taughtby":["t1","t2"],"suits":["r1","r2","r4"]}, "l2":{"taughtby":["t1","t2"],"suits":["r1","r2","r4"]}, 
+			"l3":{"taughtby":["t1","t2"],"suits":["r1","r2","r4"]}, "l4":{"taughtby":["t1","t2"],"suits":["r1","r2","r4"]}, 
+			"l5":{"taughtby":["t1","t2"],"suits":["r1","r2","r4"]}, "l6":{"taughtby":["t3","t4"],"suits":["r1","r2","r4"]}, 
+			"l7":{"taughtby":["t3","t4"],"suits":["r1","r2","r4"]}, "l8":{"taughtby":["t3","t4"],"suits":["r1","r2","r4"]}, 
+			"l9":{"taughtby":["t3","t4"],"suits":["r1","r2","r4"]}, "l10":{"taughtby":["t3","t4"],"suits":["r1","r2","r4"]},
+			"l11":{"taughtby":["t2","t5"],"suits":["r1","r3","r5"]}, "l12":{"taughtby":["t2","t5"],"suits":["r1","r3","r5"]}, 
+			"l13":{"taughtby":["t2","t5"],"suits":["r1","r3","r5"]}, "l14":{"taughtby":["t2","t5"],"suits":["r1","r3","r5"]}, 
+			"l15":{"taughtby":["t2","t5"],"suits":["r1","r3","r5"]}, "l16":{"taughtby":["t3","t5"],"suits":["r1","r3","r5"]}, 
+			"l17":{"taughtby":["t3","t5"],"suits":["r1","r3","r5"]}, "l18":{"taughtby":["t3","t5"],"suits":["r1","r3","r5"]}, 
+			"l19":{"taughtby":["t3","t5"],"suits":["r1","r3","r5"]}, "l20":{"taughtby":["t3","t5"],"suits":["r1","r3","r5"]}
+		},
+		"rooms":
+		{
+			"r1":["mon1","mon2","mon3"],
+			"r2":["mon1","mon2","mon3","tue1","tue2","tue3","wed1","wed2","wed3","thu1","thu2","thu3"],
+			"r3":["tue1","tue2","tue3","wed1","wed2","wed3","thu1","thu2","thu3","fri1","fri2","fri3"],
+			"r4":["mon1","tue1","wed1","thu1","fri1"],
+			"r5":["mon3","tue3","wed3","thu3","fri3"]
+		},
+		"timeslots":
+		{
+			"Monday":["mon1","mon2","mon3"],
+		 	"Tuesday":["tue1","tue2","tue3"],
+		 	"Wednesday":["wed1","wed2","wed3"],
+		 	"Thursday":["thu1","thu2","thu3"],
+		 	"Friday":["fri1","fri2","fri3"]
+	 	}
+ 	}
+]
