@@ -6,16 +6,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%  A program to create a time schedule given:
-%%		TimeSlots, [TimeSlots are not explicitly given, but implicitly modeled
-%%					from the timeslots available to teachers and rooms]
+%%		TimeSlots, for five different days
 %%		Rooms, and at which times they are available
 %%		Teachers, and at which times they are available,
 %%					no teacher may teach more than 5 lectures,
 %%		Lectures, and by which teachers they might be taught,
 %%					and in which rooms they can be hold
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	Queries to this program need to be in the following form:
-%%	[+Teachers,+Lectures,+Rooms,+TimeSlots,-Schedule]
+%%
+%%	Queries to this program need to be formulated in the following form:
+%%	[+Teachers,+Lectures,+Rooms,+TimeSlots]
 %%	Where: Teachers is a list of lists, each representing one teacher:
 %%				[teacher name,[available times]]
 %%			Lectures is a list of lists, each representing one lecture:
@@ -24,8 +25,10 @@
 %%				and rooms contains the name of possible rooms
 %%			Rooms is a list of lists, each representing one room:
 %%				[roomname, [available times]]
-%%			Schedule is a list of lists, each containing a tuple:
-%%				[timeslot, lecture name, teacher name, room]
+%%			
+%%	The resulting schedule will be printed to the console.
+%%
+%%	To use the test queries in the program just use 'start(1)' or 'start(2)'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -58,6 +61,10 @@ query(1, [
 		[r3,[tue1,tue2,tue3,wed1,wed2,wed3,thu1,thu2,thu3,fri1,fri2,fri3]],
 		[r4,[mon1,tue1,wed1,thu1,fri1]],
 		[r5,[mon3,tue3,wed3,thu3,fri3]]
+	],
+	[
+		[mon1,mon2,mon3],[tue1,tue2,tue3],
+		[wed1,wed2,wed3],[thu1,thu2,thu3],[fri1,fri2,fri3]
 	]
 	]).
 
@@ -80,6 +87,9 @@ query(2, [
 		[r1,[mon1,mon2,tue1,tue2,wed1,wed2]],
 		[r2,[mon1,mon2,tue1,tue2]],
 		[r3,[mon1,tue1,wed1]]
+	],
+	[
+		[mon1,mon2],[tue1,tue2],[wed1,wed2],[thu1,thu2],[fri1,fri2]
 	]
 	]).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,17 +98,18 @@ query(2, [
 %% used to kick-off the schedule with a built in quert
 %% X is the number of query to be consulted, S holds the schedule
 %% start(+X,-S)
-start(X,S) :-
+start(X) :-
 	query(X,D),
-	solve(D,S).
+	solve(D).
 
 %% attempting to build a schedule out of the given data
 %% solve(+Data,-S)
-solve([Teachers,Lectures,Rooms], S) :-
+solve([Teachers,Lectures,Rooms,Days]) :-
 	initTeacherCounter(Teachers),
 	unify(Lectures, Teachers,Rooms,UniFied),
 	merge_sort(UniFied,Sorted),
-	schedule(Sorted,[],S).
+	schedule(Sorted,[],Schedule),
+	sortAndPrint(Days,Schedule).
 
 %% initialises for each teacher a global counter with 0, so we can keep track of
 %% how many lectures each teacher is teaching
@@ -206,3 +217,22 @@ schedule([[Lecture,Teachers,Rooms,TimeSlots]|R],Schedule,Res) :-
 	C1 is C+1,
 	asserta(teacherCounter(Teacher,C1)),
 	schedule(R,[[Slot,Lecture,Teacher,Room]|Schedule],Res).
+
+%% sorts the schdule according to the input timeslots
+%% also prints each day in one line for readability
+%% sortAndPrint(+Days,+Schedule)
+sortAndPrint([],_).
+sortAndPrint([Day|Days],Schedule) :-
+	daySort(Day,Schedule,DayList),
+	write(DayList), nl,
+	sortAndPrint(Days,Schedule).
+
+%% finds all scheduled lectures in the list for the given day
+%% daySort(+Day,+Schedule,-SortedList)
+daySort([],_,[]).
+daySort([TimeSlot|Slots],Schedule,DayList) :-
+	findall([TimeSlot,Lecture,Teacher,Room],
+			(member([TimeSlot,Lecture,Teacher,Room],Schedule)),
+			SlotList),
+	daySort(Slots,Schedule,R),
+	append(SlotList,R,DayList).
