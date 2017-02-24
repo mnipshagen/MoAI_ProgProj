@@ -110,7 +110,7 @@ solve([Teachers,Lectures,Rooms,Days]) :-
 	asserta(rooms(Rooms)),
 	asserta(lectures(Lectures)),
 	unify(Lectures,Teachers,Rooms,Unified),
-	merge_sort(Unified,Sorted),
+	merge_sort(Unified,Sorted),!,
 	schedule(Sorted,[],Schedule),
 	sortAndPrint(Days,Schedule).
 
@@ -118,7 +118,7 @@ solve([Teachers,Lectures,Rooms,Days]) :-
 %% how many lectures each teacher is teaching and which times we already used
 %% initTeacherCounter(+Teachers)
 initTeacherCounter([]).
-initTeacherCounter([[Teacher,Times]|R]) :-
+initTeacherCounter([[Teacher,_]|R]) :-
 	asserta(teacherCounter(Teacher,0)),
 	initTeacherCounter(R).
 
@@ -210,21 +210,26 @@ even_odd2([H|T],E,[H|O]):-even_odd2(T,O,E).
 %% schedule(+UnifiedData,[],-ResultingSchedule)
 schedule([],Schedule,Schedule).
 schedule([[Lecture,Teachers,Rooms,TimeSlots]|R],Schedule,Res) :-
-	member(Teacher,Teachers),
-	member(Room,Rooms),
 	member(Slot,TimeSlots),
+	member(Teacher,Teachers),
+	teachers(AllTeachers),
+	slotExists(Teacher,Slot,AllTeachers),
+	member(Room,Rooms),
+	rooms(AllRooms),
+	slotExists(Room,Slot,AllRooms),
 	teacherCounter(Teacher,C), C<5,
 
 	retract(lectures(Lectures)),
 	delete(Lectures,[Lecture,_,_],RemLectures),
 	asserta(lectures(RemLectures)),
-	retract(rooms(AllRooms)),
 	deleteSlot(AllRooms,Room,Slot,RemRooms),
+	retract(rooms(AllRooms)),
 	asserta(rooms(RemRooms)),
-	retract(teachers(AllTeachers)),
 	deleteSlot(AllTeachers,Teacher,Slot,RemTeachers),
+	retract(teachers(AllTeachers)),
 	asserta(teachers(RemTeachers)),
 	C1 is C+1,
+	retract(teacherCounter(Teacher,C)),
 	asserta(teacherCounter(Teacher,C1)),
 
 	unify(RemLectures,RemTeachers,RemRooms,ToSchedule),
@@ -237,6 +242,12 @@ deleteSlot([[Item,Slots]|R],Item,Slot,[[Item,NSlots]|R]) :-
 deleteSlot([[X,Slots]|R],Item,Slot,[[X,Slots]|R2]) :- 
 	deleteSlot(R,Item,Slot,R2).
 
+%%
+slotExists(Chosen,Slot,[[Chosen,TimeSlots]|R]) :-
+	member(Slot,TimeSlots).
+slotExists(Chosen,Slot,[[NotChosen,TimeSlots]|R]) :-
+	slotExists(Chosen,Slot,R).
+
 
 %% sorts the schdule according to the input timeslots
 %% also prints each day in one line for readability
@@ -244,7 +255,7 @@ deleteSlot([[X,Slots]|R],Item,Slot,[[X,Slots]|R2]) :-
 sortAndPrint([],_).
 sortAndPrint([Day|Days],Schedule) :-
 	daySort(Day,Schedule,DayList),
-	write(DayList), nl,
+	%write(DayList), nl,
 	sortAndPrint(Days,Schedule).
 
 %% finds all scheduled lectures in the list for the given day
@@ -254,5 +265,6 @@ daySort([TimeSlot|Slots],Schedule,DayList) :-
 	findall([TimeSlot,Lecture,Teacher,Room],
 			(member([TimeSlot,Lecture,Teacher,Room],Schedule)),
 			SlotList),
+	write(SlotList),nl,
 	daySort(Slots,Schedule,R),
 	append(SlotList,R,DayList).

@@ -106,6 +106,7 @@ start(X) :-
 %% solve(+Data,-S)
 solve([Teachers,Lectures,Rooms,Days]) :-
 	initTeacherCounter(Teachers),
+	asserta(teachers(Teachers)), asserta(rooms(Rooms)),
 	unify(Lectures, Teachers,Rooms,UniFied),
 	merge_sort(UniFied,Sorted),
 	schedule(Sorted,[],Schedule),
@@ -207,10 +208,14 @@ even_odd2([H|T],E,[H|O]):-even_odd2(T,O,E).
 %% schedule(+UnifiedData,[],-ResultingSchedule)
 schedule([],Schedule,Schedule).
 schedule([[Lecture,Teachers,Rooms,TimeSlots]|R],Schedule,Res) :-
-	member(Teacher,Teachers),
-	member(Room,Rooms),
 	member(Slot,TimeSlots),
-	teacherCounter(Teacher,C), C<4,
+	member(Teacher,Teachers),
+%	teachers(AllTeachers),
+%	slotExists(Teacher,Slot,AllTeachers),
+	member(Room,Rooms),
+%	rooms(AllRooms),
+%	slotExists(Room,Slot,AllRooms),
+	teacherCounter(Teacher,C), C<5,
 	not(member([Slot,_,Teacher,_],Schedule)),
 	not(member([Slot,_,_,Room],Schedule)),
 	retract(teacherCounter(Teacher,C)),
@@ -218,13 +223,19 @@ schedule([[Lecture,Teachers,Rooms,TimeSlots]|R],Schedule,Res) :-
 	asserta(teacherCounter(Teacher,C1)),
 	schedule(R,[[Slot,Lecture,Teacher,Room]|Schedule],Res).
 
+%%
+slotExists(Chosen,Slot,[[Chosen,TimeSlots]|R]) :-
+	member(Slot,TimeSlots).
+slotExists(Chosen,Slot,[[NotChosen,TimeSlots]|R]) :-
+	slotExists(Chosen,Slot,R).
+
 %% sorts the schdule according to the input timeslots
 %% also prints each day in one line for readability
 %% sortAndPrint(+Days,+Schedule)
 sortAndPrint([],_).
 sortAndPrint([Day|Days],Schedule) :-
 	daySort(Day,Schedule,DayList),
-	write(DayList), nl,
+	%write(DayList), nl,
 	sortAndPrint(Days,Schedule).
 
 %% finds all scheduled lectures in the list for the given day
@@ -234,5 +245,6 @@ daySort([TimeSlot|Slots],Schedule,DayList) :-
 	findall([TimeSlot,Lecture,Teacher,Room],
 			(member([TimeSlot,Lecture,Teacher,Room],Schedule)),
 			SlotList),
+	write(SlotList),nl,
 	daySort(Slots,Schedule,R),
 	append(SlotList,R,DayList).
