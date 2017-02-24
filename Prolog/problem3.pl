@@ -106,16 +106,19 @@ start(X) :-
 %% solve(+Data,-S)
 solve([Teachers,Lectures,Rooms,Days]) :-
 	initTeacherCounter(Teachers),
-	unify(Lectures, Teachers,Rooms,UniFied),
-	merge_sort(UniFied,Sorted),
+	asserta(teachers(Teachers)),
+	asserta(rooms(Rooms)),
+	asserta(lectures(Lectures)),
+	unify(Lectures,Teachers,Rooms,Unified),
+	merge_sort(Unified,Sorted),
 	schedule(Sorted,[],Schedule),
 	sortAndPrint(Days,Schedule).
 
 %% initialises for each teacher a global counter with 0, so we can keep track of
-%% how many lectures each teacher is teaching
+%% how many lectures each teacher is teaching and which times we already used
 %% initTeacherCounter(+Teachers)
 initTeacherCounter([]).
-initTeacherCounter([[Teacher,_]|R]) :-
+initTeacherCounter([[Teacher,Times]|R]) :-
 	asserta(teacherCounter(Teacher,0)),
 	initTeacherCounter(R).
 
@@ -210,13 +213,30 @@ schedule([[Lecture,Teachers,Rooms,TimeSlots]|R],Schedule,Res) :-
 	member(Teacher,Teachers),
 	member(Room,Rooms),
 	member(Slot,TimeSlots),
-	teacherCounter(Teacher,C), C<4,
-	not(member([Slot,_,Teacher,_],Schedule)),
-	not(member([Slot,_,_,Room],Schedule)),
-	retract(teacherCounter(Teacher,C)),
+	teacherCounter(Teacher,C), C<5,
+
+	retract(lectures(Lectures)),
+	delete(Lectures,[Lecture,_,_],RemLectures),
+	asserta(lectures(RemLectures)),
+	retract(rooms(AllRooms)),
+	deleteSlot(AllRooms,Room,Slot,RemRooms),
+	asserta(rooms(RemRooms)),
+	retract(teachers(AllTeachers)),
+	deleteSlot(AllTeachers,Teacher,Slot,RemTeachers),
+	asserta(teachers(RemTeachers)),
 	C1 is C+1,
 	asserta(teacherCounter(Teacher,C1)),
-	schedule(R,[[Slot,Lecture,Teacher,Room]|Schedule],Res).
+
+	unify(RemLectures,RemTeachers,RemRooms,ToSchedule),
+	merge_sort(ToSchedule,Sorted),
+	schedule(Sorted,[[Slot,Lecture,Teacher,Room]|Schedule],Res).
+
+%%
+deleteSlot([[Item,Slots]|R],Item,Slot,[[Item,NSlots]|R]) :-
+	delete(Slots,Slot,NSlots),!.
+deleteSlot([[X,Slots]|R],Item,Slot,[[X,Slots]|R2]) :- 
+	deleteSlot(R,Item,Slot,R2).
+
 
 %% sorts the schdule according to the input timeslots
 %% also prints each day in one line for readability
