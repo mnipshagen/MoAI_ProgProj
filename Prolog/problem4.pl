@@ -1,36 +1,40 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	Created by:	Moritz Nipshagen, Anna Sandor, Arno Stiefvater
-%%				{mnipshagen,asandor,astiefvater}@uos.de
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%%  A program to create a time schedule given:
-%%		TimeSlots, for five different days
-%%		Rooms, and at which times they are available
-%%		Teachers, and at which times they are available,
-%%					no teacher may teach more than 5 lectures,
-%%		Lectures, and by which teachers they might be taught,
-%%					and in which rooms they can be hold
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%%	Queries to this program need to be formulated in the following form:
-%%	[+Teachers,+Lectures,+Rooms,+TimeSlots]
-%%	Where: Teachers is a list of lists, each representing one teacher:
-%%				[teacher name,[available times]]
-%%			Lectures is a list of lists, each representing one lecture:
-%%				[lecture name, [teachers], [rooms]]
-%%				where teachers contains the names of possible teachers,
-%%				and rooms contains the name of possible rooms
-%%			Rooms is a list of lists, each representing one room:
-%%				[roomname, [available times]]
-%%			
-%%	The resulting schedule will be printed to the console.
-%%
-%%	To use the test queries in the program just use 'start(1)' or 'start(2)'
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Created by:	Moritz Nipshagen, Anna Sandor, Arno Stiefvater				  %%
+%%				{mnipshagen,asandor,astiefvater}@uos.de 					  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%																			  %%
+%%  A program to create a time schedule given:								  %%
+%%		TimeSlots, for five different days 									  %%
+%%		Rooms, and at which times they are available 						  %%
+%%		Teachers, and at which times they are available,					  %%
+%%					no teacher may teach more than 5 lectures, 				  %%
+%%		Lectures, and by which teachers they might be taught, 				  %%
+%%					and in which rooms they can be hold 					  %%
+%%																			  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%																			  %%
+%%	Queries to this program need to be formulated in the following form: 	  %%
+%%	[+Teachers,+Lectures,+Rooms,+TimeSlots]									  %%
+%%	Where: Teachers is a list of lists, each representing one teacher:		  %%
+%%				[teacher name,[available times]]							  %%
+%%			Lectures is a list of lists, each representing one lecture:		  %%
+%%				[lecture name, [teachers], [rooms]]							  %%
+%%				where teachers contains the names of possible teachers,		  %%
+%%				and rooms contains the name of possible Rooms 				  %%
+%%			Rooms is a list of lists, each representing one room:			  %%
+%%				[roomname, [available times]]								  %%
+%%																			  %%
+%% Note: the timeslots need to have a consistent naming!					  %%
+%% See the implemented queries as examples and further reference.			  %%
+%%																			  %%
+%%	The resulting schedule will be printed to the console.					  %%
+%%																			  %%
+%%	To use the test queries in the program just use 'start(1)' or 'start(2)'  %%
+%%																			  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% The example given in the slides, written down as a query.
 query(1, [
@@ -91,8 +95,9 @@ query(2, [
 		[mon1,mon2],[tue1,tue2],[wed1,wed2],[thu1,thu2],[fri1,fri2]
 	]
 	]).
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% used to kick-off the schedule with a built in quert
 %% X is the number of query to be consulted
