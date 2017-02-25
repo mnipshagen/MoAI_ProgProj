@@ -1,120 +1,38 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	Created by:	Moritz Nipshagen, Anna Sandor, Arno Stiefvater				  %%
-%%				{mnipshagen,asandor,astiefvater}@uos.de 					  %%
+%%	Created by:	Moritz Nipshagen, Anna Sandor, Arno Stiefvater
+%%				{mnipshagen,asandor,astiefvater}@uos.de
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%																			  %%
-%%  A program to create a time schedule given:								  %%
-%%		TimeSlots, for five different days 									  %%
-%%		Rooms, and at which times they are available 						  %%
-%%		Teachers, and at which times they are available,					  %%
-%%					no teacher may teach more than 5 lectures, 				  %%
-%%		Lectures, and by which teachers they might be taught, 				  %%
-%%					and in which rooms they can be hold 					  %%
-%%																			  %%
+%%															
+%%  A program to create a time schedule given:
+%%		TimeSlots, for five different days 	
+%%		Rooms, and at which times they are available
+%%		Teachers, and at which times they are available,
+%%					no teacher may teach more than 5 lectures,
+%%		Lectures, and by which teachers they might be taught,
+%%					and in which rooms they can be hold 
+%%														
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%																			  %%
-%%	Queries to this program need to be formulated in the following form: 	  %%
-%%	[+Teachers,+Lectures,+Rooms,+TimeSlots]									  %%
-%%	Where: Teachers is a list of lists, each representing one teacher:		  %%
-%%				[teacher name,[available times]]							  %%
-%%			Lectures is a list of lists, each representing one lecture:		  %%
-%%				[lecture name, [teachers], [rooms]]							  %%
-%%				where teachers contains the names of possible teachers,		  %%
-%%				and rooms contains the name of possible Rooms 				  %%
-%%			Rooms is a list of lists, each representing one room:			  %%
-%%				[roomname, [available times]]								  %%
-%%																			  %%
-%% Note: the timeslots need to have a consistent naming!					  %%
-%% See the implemented queries as examples and further reference.			  %%
-%%																			  %%
-%%	The resulting schedule will be printed to the console.					  %%
-%%																			  %%
-%%	To use the test queries in the program just use 'start(1)' or 'start(2)'  %%
-%%																			  %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-%% The example given in the slides, written down as a query.
-query(1, [
-	[
-		[t1,[tue1,tue2,tue3, wed1,wed2,wed3, thu1,thu2,thu3]],
-		[t2,[mon1,mon2,mon3, tue1,tue2,tue3, wed1,wed2,wed3]],
-		[t3,[thu1,thu2,thu3, fri1,fri2,fri3]],
-		[t4,[mon2,mon3,tue2,tue3,wed2,wed3,thu2,thu3,fri2,fri3]],
-		[t5,[mon1,mon2,mon3,tue1,tue2,tue3,
-				wed1,wed2,wed3,thu1,thu2,thu3,fri1,fri2,fri3]]
-	],
-	[
-		[l1,[t1,t2],[r1,r2,r4]], [l2,[t1,t2],[r1,r2,r4]],
-		[l3,[t1,t2],[r1,r2,r4]], [l4,[t1,t2],[r1,r2,r4]],
-		[l5,[t1,t2],[r1,r2,r4]], [l6,[t3,t4],[r1,r2,r4]],
-		[l7,[t3,t4],[r1,r2,r4]], [l8,[t3,t4],[r1,r2,r4]],
-		[l9,[t3,t4],[r1,r2,r4]], [l10,[t3,t4],[r1,r2,r4]],
-		[l11,[t2,t5],[r1,r3,r5]], [l12,[t2,t5],[r1,r3,r5]],
-		[l13,[t2,t5],[r1,r3,r5]], [l14,[t2,t5],[r1,r3,r5]],
-		[l15,[t2,t5],[r1,r3,r5]], [l16,[t3,t5],[r1,r3,r5]],
-		[l17,[t3,t5],[r1,r3,r5]], [l18,[t3,t5],[r1,r3,r5]],
-		[l19,[t3,t5],[r1,r3,r5]], [l20,[t3,t5],[r1,r3,r5]]
-	],
-	[
-		[r1,[mon1,mon2,mon3]],
-		[r2,[mon1,mon2,mon3,tue1,tue2,tue3,wed1,wed2,wed3,thu1,thu2,thu3]],
-		[r3,[tue1,tue2,tue3,wed1,wed2,wed3,thu1,thu2,thu3,fri1,fri2,fri3]],
-		[r4,[mon1,tue1,wed1,thu1,fri1]],
-		[r5,[mon3,tue3,wed3,thu3,fri3]]
-	],
-	[
-		[mon1,mon2,mon3],[tue1,tue2,tue3],
-		[wed1,wed2,wed3],[thu1,thu2,thu3],[fri1,fri2,fri3]
-	]
-	]).
-
-%% a simpler query for test purposes
-query(2, [
-	[
-		[t1,[mon1,tue1,wed1]],
-		[t2,[mon2,tue1,tue2]],
-		[t3,[mon1,mon2,tue1,tue2,wed1,wed2]]
-	],
-	[
-		[l1,[t1],[r1,r2]],
-		[l2,[t1,t2],[r1,r2]],
-		[l3,[t1,t2],[r2,r3]],
-		[l4,[t2,t3],[r1,r3]],
-		[l5,[t3],[r3]],
-		[l6,[t3],[r1,r2,r3]]
-	],
-	[
-		[r1,[mon1,mon2,tue1,tue2,wed1,wed2]],
-		[r2,[mon1,mon2,tue1,tue2]],
-		[r3,[mon1,tue1,wed1]]
-	],
-	[
-		[mon1,mon2],[tue1,tue2],[wed1,wed2],[thu1,thu2],[fri1,fri2]
-	]
-	]).
-
-%% a query without solution
-query(3, [
-	[
-		[t1,[mon1,mon2,mon3]],
-		[t2,[tue1,tue2,tue3]]
-	],
- 	[
- 		[l1,[t1,t2],[r1]]
- 	],
-  	[
-  		[r1,[wed1,wed2,wed3]]
-  	],
-  	[
-  		[mon1,mon2,mon3],[tue1,tue2,tue3],[wed1,wed2,wed3]
-  	]
-  	]).
-
+%%														
+%%	Queries to this program need to be formulated in the following form:
+%%	[+Teachers,+Lectures,+Rooms,+TimeSlots]								
+%%	Where: Teachers is a list of lists, each representing one teacher:
+%%				[teacher name,[available times]]				
+%%			Lectures is a list of lists, each representing one lecture:
+%%				[lecture name, [teachers], [rooms]]						
+%%				where teachers contains the names of possible teachers,	
+%%				and rooms contains the name of possible Rooms 			
+%%			Rooms is a list of lists, each representing one room:		
+%%				[roomname, [available times]]							
+%%																		
+%% Note: the timeslots need to have a consistent naming!				
+%% See the implemented queries as examples and further reference.		
+%%																		
+%%	The resulting schedule will be printed to the console.				
+%%																		
+%%	To use the test queries in the program just use 'start(1)'
+%%																			
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -286,7 +204,7 @@ removeTeacher(Teacher,[[Lecture,Pairs]|R],[[Lecture,NPairs]|Res]) :-
 %% removes all pairs from a set of pairs which use the given teacher
 %% remPairs(+Teacher,+Pairs,-LessPairs)
 remPairs(_,[],[]).
-remPairs(T,[[Slot,Teacher,Room]|R],NPairs) :-
+remPairs(T,[[_Slot,Teacher,_Room]|R],NPairs) :-
 	T=Teacher,
 	remPairs(T,R,NPairs),!.
 remPairs(T,[[Slot,Teacher,Room]|R],[[Slot,Teacher,Room]|NPairs]) :-
@@ -310,3 +228,115 @@ daySort([TimeSlot|Slots],Schedule) :-
 			SlotList),
 	write(SlotList),nl,
 	daySort(Slots,Schedule).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% test Queries
+
+%% The example given in the slides, written down as a query.
+query(1, [
+	[
+		[t1,[tue1,tue2,tue3, wed1,wed2,wed3, thu1,thu2,thu3]],
+		[t2,[mon1,mon2,mon3, tue1,tue2,tue3, wed1,wed2,wed3]],
+		[t3,[thu1,thu2,thu3, fri1,fri2,fri3]],
+		[t4,[mon2,mon3,tue2,tue3,wed2,wed3,thu2,thu3,fri2,fri3]],
+		[t5,[mon1,mon2,mon3,tue1,tue2,tue3,
+				wed1,wed2,wed3,thu1,thu2,thu3,fri1,fri2,fri3]]
+	],
+	[
+		[l1,[t1,t2],[r1,r2,r4]], [l2,[t1,t2],[r1,r2,r4]],
+		[l3,[t1,t2],[r1,r2,r4]], [l4,[t1,t2],[r1,r2,r4]],
+		[l5,[t1,t2],[r1,r2,r4]], [l6,[t3,t4],[r1,r2,r4]],
+		[l7,[t3,t4],[r1,r2,r4]], [l8,[t3,t4],[r1,r2,r4]],
+		[l9,[t3,t4],[r1,r2,r4]], [l10,[t3,t4],[r1,r2,r4]],
+		[l11,[t2,t5],[r1,r3,r5]], [l12,[t2,t5],[r1,r3,r5]],
+		[l13,[t2,t5],[r1,r3,r5]], [l14,[t2,t5],[r1,r3,r5]],
+		[l15,[t2,t5],[r1,r3,r5]], [l16,[t3,t5],[r1,r3,r5]],
+		[l17,[t3,t5],[r1,r3,r5]], [l18,[t3,t5],[r1,r3,r5]],
+		[l19,[t3,t5],[r1,r3,r5]], [l20,[t3,t5],[r1,r3,r5]]
+	],
+	[
+		[r1,[mon1,mon2,mon3]],
+		[r2,[mon1,mon2,mon3,tue1,tue2,tue3,wed1,wed2,wed3,thu1,thu2,thu3]],
+		[r3,[tue1,tue2,tue3,wed1,wed2,wed3,thu1,thu2,thu3,fri1,fri2,fri3]],
+		[r4,[mon1,tue1,wed1,thu1,fri1]],
+		[r5,[mon3,tue3,wed3,thu3,fri3]]
+	],
+	[
+		[mon1,mon2,mon3],[tue1,tue2,tue3],
+		[wed1,wed2,wed3],[thu1,thu2,thu3],[fri1,fri2,fri3]
+	]
+	]).
+
+%% a simpler query for test purposes
+query(2, [
+	[
+		[t1,[mon1,tue1,wed1]],
+		[t2,[mon2,tue1,tue2]],
+		[t3,[mon1,mon2,tue1,tue2,wed1,wed2]]
+	],
+	[
+		[l1,[t1],[r1,r2]],
+		[l2,[t1,t2],[r1,r2]],
+		[l3,[t1,t2],[r2,r3]],
+		[l4,[t2,t3],[r1,r3]],
+		[l5,[t3],[r3]],
+		[l6,[t3],[r1,r2,r3]]
+	],
+	[
+		[r1,[mon1,mon2,tue1,tue2,wed1,wed2]],
+		[r2,[mon1,mon2,tue1,tue2]],
+		[r3,[mon1,tue1,wed1]]
+	],
+	[
+		[mon1,mon2],[tue1,tue2],[wed1,wed2],[thu1,thu2],[fri1,fri2]
+	]
+	]).
+
+%% a query without solution
+query(3, [
+	[
+		[t1,[mon1,mon2,mon3]],
+		[t2,[tue1,tue2,tue3]]
+	],
+ 	[
+ 		[l1,[t1,t2],[r1]]
+ 	],
+  	[
+  		[r1,[wed1,wed2,wed3]]
+  	],
+  	[
+  		[mon1,mon2,mon3],[tue1,tue2,tue3],[wed1,wed2,wed3]
+  	]
+  	]).
+
+%% another test query
+query(4, [
+    [
+        [t1,[mon1,tue1,tue2,fri1,fri2]],
+        [t2,[mon2,tue1,tue2,wed1,wed2,thu1,thu2]],
+        [t3,[wed1,wed2,thu2,fri2]],
+        [t4,[tue1,tue2,fri1,fri2]],
+        [t5,[mon1,mon2,thu1,thu2]]
+    ],
+    [
+        [art1,[t1,t2],[r2]],
+        [art2,[t1,t2],[r2]],
+        [music1,[t2,t3],[r1]],
+        [music2,[t2,t3],[r1]],
+        [ger1,[t1,t3],[r1,r2,r3]],
+        [ger2,[t1,t3],[r1,r2,r3]],
+        [eng,[t1,t3,t4],[r1,r2,r3]],
+        [french,[t4],[r1,r2,r3]],
+        [math1,[t5,t1],[r1,r2,r3]],
+        [math2,[t5,t1],[r1,r2,r3]]
+    ],
+    [
+        [r1,[mon1,mon2,tue1,tue2,wed1,wed2,thu1,thu2,fri1,fri2]],
+        [r2,[mon1,mon2,tue1,tue2,wed1,wed2,thu1,thu2,fri1,fri2]],
+        [r3,[mon1,mon2,tue1,tue2,wed1,wed2,thu1,thu2,fri1,fri2]]
+    ],
+    [
+        [mon1,mon2],[tue1,tue2],[wed1,wed2],[thu1,thu2],[fri1,fri2]
+    ]   
+    ]).
