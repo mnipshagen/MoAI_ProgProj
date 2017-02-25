@@ -36,6 +36,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+
 %% The example given in the slides, written down as a query.
 query(1, [
 	[
@@ -47,15 +49,15 @@ query(1, [
 				wed1,wed2,wed3,thu1,thu2,thu3,fri1,fri2,fri3]]
 	],
 	[
-		[l1,[t1,t2],[r1,r2,r4]], [l2,[t1,t2],[r1,r2,r4]], 
-		[l3,[t1,t2],[r1,r2,r4]], [l4,[t1,t2],[r1,r2,r4]], 
-		[l5,[t1,t2],[r1,r2,r4]], [l6,[t3,t4],[r1,r2,r4]], 
-		[l7,[t3,t4],[r1,r2,r4]], [l8,[t3,t4],[r1,r2,r4]], 
+		[l1,[t1,t2],[r1,r2,r4]], [l2,[t1,t2],[r1,r2,r4]],
+		[l3,[t1,t2],[r1,r2,r4]], [l4,[t1,t2],[r1,r2,r4]],
+		[l5,[t1,t2],[r1,r2,r4]], [l6,[t3,t4],[r1,r2,r4]],
+		[l7,[t3,t4],[r1,r2,r4]], [l8,[t3,t4],[r1,r2,r4]],
 		[l9,[t3,t4],[r1,r2,r4]], [l10,[t3,t4],[r1,r2,r4]],
-		[l11,[t2,t5],[r1,r3,r5]], [l12,[t2,t5],[r1,r3,r5]], 
-		[l13,[t2,t5],[r1,r3,r5]], [l14,[t2,t5],[r1,r3,r5]], 
-		[l15,[t2,t5],[r1,r3,r5]], [l16,[t3,t5],[r1,r3,r5]], 
-		[l17,[t3,t5],[r1,r3,r5]], [l18,[t3,t5],[r1,r3,r5]], 
+		[l11,[t2,t5],[r1,r3,r5]], [l12,[t2,t5],[r1,r3,r5]],
+		[l13,[t2,t5],[r1,r3,r5]], [l14,[t2,t5],[r1,r3,r5]],
+		[l15,[t2,t5],[r1,r3,r5]], [l16,[t3,t5],[r1,r3,r5]],
+		[l17,[t3,t5],[r1,r3,r5]], [l18,[t3,t5],[r1,r3,r5]],
 		[l19,[t3,t5],[r1,r3,r5]], [l20,[t3,t5],[r1,r3,r5]]
 	],
 	[
@@ -96,6 +98,23 @@ query(2, [
 	]
 	]).
 
+%% a query without solution
+query(3, [
+	[
+		[t1,[mon1,mon2,mon3]],
+		[t2,[tue1,tue2,tue3]]
+	],
+ 	[
+ 		[l1,[t1,t2],[r1]]
+ 	],
+  	[
+  		[r1,[wed1,wed2,wed3]]
+  	],
+  	[
+  		[mon1,mon2,mon3],[tue1,tue2,tue3],[wed1,wed2,wed3]
+  	]
+  	]).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -104,7 +123,7 @@ query(2, [
 %% start(+X)
 start(X) :-
 	query(X,D),
-	solve(D).	
+	solve(D).
 
 %% attempting to build a schedule out of the given data
 %% solve(+Data)
@@ -137,7 +156,7 @@ findPairs([Teacher|RT],Teachers,InRooms,Rooms,Result) :-
 	findPairs(RT,Teachers,InRooms,Rooms,Res1),
 	append(Res,Res1,Result).
 
-%% for a given Teacher, it finds all rooms out of a set, which are available 
+%% for a given Teacher, it finds all rooms out of a set, which are available
 %% at the same timeslots the teacher is available at.
 %% fitRooms(+Teacher, +TeacherTimeSlots, +RoomSet, +RoomDB, -Pairs)
 fitRooms(_,[],_,_,[]).
@@ -154,7 +173,7 @@ fitRooms(Teacher,[Slot|TimeSlots],InRooms,Rooms,Pairs) :-
 
 %% initialises for each teacher a counter with 0, so we can keep track of
 %% how many lectures each teacher is teaching and which times we already used
-%% Teacher and Counter are stored as as pair. 
+%% Teacher and Counter are stored as as pair.
 %% initTeacherCounter(+Teachers, -TeacherCounterList)
 initTeacherCounter([],[]).
 initTeacherCounter([[Teacher,_]|R],[[Teacher,0]|Res]) :-
@@ -167,12 +186,12 @@ merge_sort([],[]).
 merge_sort([X],[X]).
 merge_sort(List,Sorted):-
     List=[_,_|_],
-    even_odd2(List,L1,L2), 
+    even_odd2(List,L1,L2),
 	merge_sort(L1,Sorted1),
 	merge_sort(L2,Sorted2),
 	merge(Sorted1,Sorted2,Sorted).
 
-%% merges two lists, sorted by the length of the 2nd sublist 
+%% merges two lists, sorted by the length of the 2nd sublist
 %% (the amoung of possible teacher-room-combinations)
 %%merge(+L1,+L2,-MergedList)
 merge([],L,L).
@@ -219,7 +238,7 @@ schedule([[Lecture,Pairs]|R],Schedule,Res,TCounter) :-
 	delete(TCounter,[Teacher,C],TCounterTemp),
 	append(TCounterTemp,[[Teacher,C1]],NTCounter),
 	(
-	(C1=MaxLectures) -> 	
+	(C1=MaxLectures) ->
 				(
 				removeTeacher(Teacher,R,NewR),
 				reserve(TimeSlot,Teacher,Room,NewR,Reserved),
